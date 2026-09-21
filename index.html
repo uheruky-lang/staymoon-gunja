@@ -1,12 +1,282 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Stay Moon Gunja</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>스테이문 군자 | Stay Moon Gunja</title>
+<meta name="description" content="서울 군자역 가까이에서 머무는 Stay Moon Gunja 공식 예약 사이트">
+<style>
+:root{--ink:#26231f;--paper:#f7f5f1;--line:#ddd7ce;--muted:#8d877f;--selected:#26231f}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"Noto Sans KR",sans-serif}
+.hero{height:100svh;min-height:560px;position:relative;overflow:hidden;background:#111;color:#fff}
+.slide{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transform:scale(1.02);animation:desktopFade 35s infinite ease-in-out;will-change:opacity,transform,background-position}
+.slide:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.14)}
+.slide:nth-child(1){background-image:url('hero-01.webp');animation-delay:0s}
+.slide:nth-child(2){background-image:url('hero-02.webp');animation-delay:7s}
+.slide:nth-child(3){background-image:url('hero-03.webp');animation-delay:14s}
+.slide:nth-child(4){background-image:url('hero-04.webp');animation-delay:21s}
+.slide:nth-child(5){background-image:url('hero-05.webp');animation-delay:28s}
+@keyframes desktopFade{0%{opacity:0;transform:scale(1.02)}6%{opacity:1}20%{opacity:1;transform:scale(1.055)}26%{opacity:0}100%{opacity:0}}
+.brand{position:absolute;z-index:3;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;text-shadow:0 2px 18px rgba(0,0,0,.25)}
+.brand h1{margin:0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(34px,5.6vw,62px);font-weight:400;letter-spacing:.025em}
+.brand .tagline{margin:10px 0 0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(12px,1.6vw,18px);font-weight:600}
+.brand .branch{margin:18px 0 0;font-size:10px;letter-spacing:.42em;padding-left:.42em}
+.scroll{position:absolute;z-index:3;bottom:max(28px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);white-space:nowrap;font-size:11px;letter-spacing:.25em;opacity:.9}
+.scroll:after{content:"↓";display:block;text-align:center;font-size:19px;margin-top:10px}
+
+.booking{max-width:720px;margin:auto;padding:64px 20px 90px}
+.booking h2{text-align:center;font:400 30px/1.2 Georgia,"Times New Roman",serif;letter-spacing:.06em;margin:0 0 8px}
+.booking .lead{text-align:center;color:var(--muted);font-size:13px;margin:0 0 34px}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.cal-head button{border:0;background:transparent;font-size:24px;width:42px;height:42px;cursor:pointer;color:var(--ink)}
+.month-title{font:400 20px Georgia,"Times New Roman",serif;letter-spacing:.05em}
+.week,.days{display:grid;grid-template-columns:repeat(7,1fr)}
+.week div{text-align:center;font-size:11px;color:var(--muted);padding:8px 0}
+.day{position:relative;min-height:68px;border:0;background:transparent;border-radius:10px;padding:9px 2px 5px;cursor:pointer;color:var(--ink)}
+.day:hover:not(:disabled){background:#ece8e1}
+.day .num{display:block;font-size:14px}
+.day .price{display:block;font-size:9px;margin-top:7px;color:#777}
+.day.selected{background:var(--selected);color:white}
+.day.selected .price{color:#ddd}
+.day.in-range{background:#e5e0d8;border-radius:0}
+.day.disabled,.day:disabled{cursor:default;color:#c5c0b9}
+.day.disabled .price{display:none}
+.day.booked{text-decoration:line-through;color:#bbb}
+.legend{font-size:11px;color:var(--muted);margin:14px 2px 30px}
+.summary{border-top:1px solid var(--line);padding-top:26px}
+.dates{display:flex;gap:10px;margin-bottom:18px}
+.datebox{flex:1;border:1px solid var(--line);border-radius:12px;padding:13px 14px}
+.datebox small{display:block;color:var(--muted);font-size:10px;margin-bottom:5px}
+.datebox strong{font-size:14px;font-weight:500}
+.guests{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:22px}
+.counter{display:flex;align-items:center;gap:14px}
+.counter button{width:30px;height:30px;border:1px solid var(--line);border-radius:50%;background:transparent;font-size:18px}
+.total{display:flex;justify-content:space-between;align-items:end;margin:24px 0}
+.total span{font-size:12px;color:var(--muted)}
+.total strong{font:400 28px Georgia,"Times New Roman",serif}
+.bookbtn{width:100%;border:0;border-radius:12px;background:#26231f;color:white;padding:17px;font-size:15px;cursor:pointer}
+.bookbtn:disabled{background:#c9c5bf;cursor:not-allowed}
+.note{text-align:center;font-size:10px;color:var(--muted);margin-top:12px}
+.account{max-width:720px;margin:0 auto;padding:0 20px 90px}
+.account-card{border-top:1px solid var(--line);padding-top:38px}
+.account h3{margin:0 0 8px;font:400 22px/1.2 Georgia,"Times New Roman",serif;letter-spacing:.04em}
+.account .sub{margin:0 0 22px;color:var(--muted);font-size:12px;line-height:1.6}
+.lookup-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field{border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:transparent;width:100%;font:inherit;color:var(--ink)}
+.field-label{display:block;color:var(--muted);font-size:10px;margin:0 0 6px}
+.lookup-btn{margin-top:10px;width:100%;border:1px solid var(--ink);border-radius:12px;background:transparent;color:var(--ink);padding:14px;font-size:13px;cursor:pointer}
+.lookup-note{font-size:10px;color:var(--muted);margin-top:10px;line-height:1.5}
+.policy{margin-top:28px;padding:18px;border-radius:12px;background:#efebe5;font-size:12px;line-height:1.8}
+.policy strong{font-weight:600}
+.site-footer{max-width:720px;margin:0 auto;padding:0 20px 48px;color:var(--muted);font-size:10px;line-height:1.8}
+
+@media(max-width:700px){
+ .slide{inset:0;transform:scale(1.04);animation-duration:35s}
+ .slide:nth-child(1){animation-name:panLR}.slide:nth-child(2){animation-name:panRL}.slide:nth-child(3){animation-name:zoomSoft}.slide:nth-child(4){animation-name:panRL}.slide:nth-child(5){animation-name:zoomSoft}
+ .brand h1{font-size:clamp(32px,10.4vw,48px)}
+ .brand .tagline{font-size:12px}
+ .booking{padding-top:52px}
+ .lookup-grid{grid-template-columns:1fr}
+ .day{min-height:62px}
+}
+@keyframes panLR{0%{opacity:0;background-position:25% center;transform:scale(1.05)}6%{opacity:1}20%{opacity:1;background-position:76% center;transform:scale(1.08)}26%{opacity:0;background-position:82% center}100%{opacity:0}}
+@keyframes panRL{0%{opacity:0;background-position:78% center;transform:scale(1.05)}6%{opacity:1}20%{opacity:1;background-position:24% center;transform:scale(1.08)}26%{opacity:0;background-position:18% center}100%{opacity:0}}
+@keyframes zoomSoft{0%{opacity:0;background-position:center;transform:scale(1.09)}6%{opacity:1}20%{opacity:1;transform:scale(1.035)}26%{opacity:0}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.slide{animation:none}.slide:first-child{opacity:1}}
+</style>
 </head>
 <body>
-  <h1>Stay Moon Gunja</h1>
-  <p>Official Booking Site</p>
+<section class="hero">
+ <div class="slide"></div><div class="slide"></div><div class="slide"></div><div class="slide"></div><div class="slide"></div>
+ <div class="brand"><div><h1>STAY MOON</h1><div class="tagline">Gather. Stay. Be the Space.</div><div class="branch">GUNJA</div></div></div>
+ <div class="scroll">BOOK YOUR STAY</div>
+</section>
+
+<section class="booking" id="booking">
+ <h2>BOOK YOUR STAY</h2>
+ <p class="lead">머무실 날짜를 선택해 주세요.</p>
+ <div class="cal-head"><button id="prev" aria-label="이전 달">‹</button><div class="month-title" id="monthTitle"></div><button id="next" aria-label="다음 달">›</button></div>
+ <div class="week"><div>일</div><div>월</div><div>화</div><div>수</div><div>목</div><div>금</div><div>토</div></div>
+ <div class="days" id="days"></div>
+ <div class="legend">회색 날짜는 예약할 수 없습니다 · D+60까지 예약 가능 · 자투리 공실 1~2박 또는 체크인 5일 전부터 1박 예약 가능</div>
+
+ <div class="summary">
+  <div class="dates">
+   <div class="datebox"><small>CHECK-IN</small><strong id="checkin">날짜 선택</strong></div>
+   <div class="datebox"><small>CHECK-OUT</small><strong id="checkout">날짜 선택</strong></div>
+  </div>
+  <div class="guests"><div><small style="color:#8d877f">GUESTS</small><div style="font-size:13px;margin-top:4px">인원</div></div><div class="counter"><button id="minus">−</button><strong id="guestCount">2</strong><button id="plus">+</button></div></div>
+  <div class="total"><div><span id="nightText">날짜를 선택해 주세요</span></div><strong id="total">₩0</strong></div>
+  <button class="bookbtn" id="bookBtn" disabled>예약하기</button>
+  <div class="note">결제 기능은 다음 단계에서 네이버페이와 연결됩니다.</div>
+ </div>
+</section>
+
+<section class="account" id="reservationLookup">
+ <div class="account-card">
+  <h3>예약 조회 · 취소 신청</h3>
+  <p class="sub">공식 홈페이지 예약을 조회하고 취소 신청을 접수할 수 있습니다. 취소는 운영자 확인 후 처리됩니다.</p>
+  <div class="lookup-grid">
+   <label><span class="field-label">예약번호</span><input class="field" id="lookupReservation" autocomplete="off" placeholder="예약번호 입력"></label>
+   <label><span class="field-label">휴대폰번호</span><input class="field" id="lookupPhone" inputmode="tel" autocomplete="tel" placeholder="01012345678"></label>
+  </div>
+  <button class="lookup-btn" id="lookupBtn">예약 조회</button>
+  <div class="lookup-note" id="lookupMessage">예약번호는 체크인 월일 + 휴대폰 뒤 4자리입니다. 예: 1020-5678</div>
+  <div class="policy">
+   <strong>취소 신청 · 환불 규정</strong><br>
+   체크인 14일 전까지 취소 시 100% 환불<br>
+   체크인 14일 전 ~ 7일 전 취소 시 50% 환불<br>
+   체크인 7일 전부터는 환불 불가
+  </div>
+ </div>
+</section>
+<footer class="site-footer">Stay Moon Gunja · 공식 예약 사이트</footer>
+
+<script src="prices.js"></script>
+<script>
+const KRW=n=>new Intl.NumberFormat('ko-KR').format(n);
+const today=new Date(); today.setHours(0,0,0,0);
+const limit=new Date(today); limit.setDate(limit.getDate()+60);
+let view=new Date(today.getFullYear(),today.getMonth(),1);
+let start=null,end=null,guests=2;
+
+function price(d){
+ const sp=specialPrices[key(d)];
+ if(sp!=null)return sp;
+ return defaultPrices[['sun','mon','tue','wed','thu','fri','sat'][d.getDay()]];
+}
+
+// Live availability from Stay Moon Cloudflare Worker (Airbnb iCal proxy)
+const AVAILABILITY_API='https://staymoon-api.uheruky.workers.dev/';
+const booked=new Set();
+let availabilityLoaded=false;
+
+async function loadAvailability(){
+ try{
+   const res=await fetch(AVAILABILITY_API,{cache:'no-store'});
+   if(!res.ok) throw new Error(`availability API ${res.status}`);
+   const data=await res.json();
+   if(!data.success||!Array.isArray(data.blockedDates)) throw new Error(data.error||'invalid availability response');
+   booked.clear();
+   data.blockedDates.forEach(date=>booked.add(date));
+   availabilityLoaded=true;
+   render();
+ }catch(err){
+   console.error('Stay Moon availability load failed:',err);
+   availabilityLoaded=false;
+   // Fail closed: if live inventory cannot be verified, do not allow booking.
+   render();
+ }
+}
+function key(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function fmt(d){return d?`${d.getMonth()+1}.${String(d.getDate()).padStart(2,'0')}`:'날짜 선택'}
+function same(a,b){return a&&b&&key(a)===key(b)}
+function isBlocked(d){return d<today||d>limit||!availabilityLoaded||booked.has(key(d))||closedDates.includes(key(d))}
+function vacancyRunLength(d){
+ if(isBlocked(d))return 0;
+ let count=1,x=new Date(d);
+ while(true){x.setDate(x.getDate()-1);if(isBlocked(x))break;count++}
+ x=new Date(d);
+ while(true){x.setDate(x.getDate()+1);if(isBlocked(x))break;count++}
+ return count;
+}
+function daysUntil(d){
+ return Math.round((d-today)/86400000);
+}
+function minStayFor(d){
+ // 체크인 D-5부터는 남은 공실 길이와 관계없이 최소숙박 제한 해제
+ if(daysUntil(d)<=5)return 1;
+ return vacancyRunLength(d)<=2?1:2;
+}
+function canUseAsCheckout(d){
+ if(!start||end||d<=start)return false;
+ const nights=Math.round((d-start)/86400000);
+ if(nights<minStayFor(start))return false;
+ let x=new Date(start);
+ while(x<d){if(isBlocked(x))return false;x.setDate(x.getDate()+1)}
+ return true;
+}
+function render(){
+ document.getElementById('monthTitle').textContent=`${view.getFullYear()} · ${String(view.getMonth()+1).padStart(2,'0')}`;
+ const days=document.getElementById('days'); days.innerHTML='';
+ const first=new Date(view.getFullYear(),view.getMonth(),1);
+ const last=new Date(view.getFullYear(),view.getMonth()+1,0);
+ for(let i=0;i<first.getDay();i++) days.appendChild(document.createElement('div'));
+ for(let n=1;n<=last.getDate();n++){
+   const d=new Date(view.getFullYear(),view.getMonth(),n);
+   const b=document.createElement('button'); b.className='day';
+   b.innerHTML=`<span class="num">${n}</span><span class="price">${KRW(price(d)/1000)}k</span>`;
+   if(isBlocked(d)){
+     // A booked/closed day cannot be a stay night, but it may be selected as checkout.
+     // This is required for a 1-night gap immediately before the next reservation.
+     if(!canUseAsCheckout(d)) b.disabled=true;
+     b.classList.add('disabled');
+     if(booked.has(key(d))||closedDates.includes(key(d)))b.classList.add('booked');
+   }
+   if(same(d,start)||same(d,end)) b.classList.add('selected');
+   else if(start&&end&&d>start&&d<end) b.classList.add('in-range');
+   b.onclick=()=>selectDate(d); days.appendChild(b);
+ }
+ update();
+}
+function selectDate(d){
+ if(!start||end||d<=start){start=d;end=null}
+ else{
+   let x=new Date(start);x.setDate(x.getDate()+1);let bad=false;
+   while(x<d){if(isBlocked(x)){bad=true;break}x.setDate(x.getDate()+1)}
+   if(bad){start=d;end=null}
+   else{
+     const nights=Math.round((d-start)/86400000);
+     if(nights<minStayFor(start)){end=null}else end=d;
+   }
+ }
+ render();
+}
+function update(){
+ document.getElementById('checkin').textContent=fmt(start);
+ document.getElementById('checkout').textContent=fmt(end);
+ let roomTotal=0,nights=0;
+ if(start&&end){
+   let d=new Date(start);
+   while(d<end){roomTotal+=price(d);nights++;d.setDate(d.getDate()+1)}
+ }
+ const extraGuests=Math.max(0,guests-baseGuestCount);
+ const extraFee=extraGuests*extraGuestFeePerNight*nights;
+ const total=roomTotal+extraFee;
+ document.getElementById('total').textContent=`₩${KRW(total)}`;
+ if(nights) document.getElementById('nightText').textContent=`${nights}박 · ${guests}명${extraFee?` · 추가인원 ₩${KRW(extraFee)}`:''}`;
+ else if(start) document.getElementById('nightText').textContent=minStayFor(start)===1?(daysUntil(start)<=5?'임박 예약 · 1박 예약 가능':'자투리 공실 · 1박 예약 가능'):'최소 2박부터 예약 가능합니다';
+ else document.getElementById('nightText').textContent='날짜를 선택해 주세요';
+ document.getElementById('bookBtn').disabled=!end;
+}
+document.getElementById('prev').onclick=()=>{const p=new Date(view.getFullYear(),view.getMonth()-1,1);if(p>=new Date(today.getFullYear(),today.getMonth(),1)){view=p;render()}};
+document.getElementById('next').onclick=()=>{const n=new Date(view.getFullYear(),view.getMonth()+1,1);if(n<=new Date(limit.getFullYear(),limit.getMonth(),1)){view=n;render()}};
+document.getElementById('minus').onclick=()=>{guests=Math.max(1,guests-1);document.getElementById('guestCount').textContent=guests;update()};
+document.getElementById('plus').onclick=()=>{guests=Math.min(maxGuestCount,guests+1);document.getElementById('guestCount').textContent=guests;update()};
+document.querySelector('.scroll').onclick=()=>document.getElementById('booking').scrollIntoView({behavior:'smooth'});
+document.getElementById('bookBtn').onclick=()=>{
+ if(!start||!end) return;
+ const phone=prompt('예약자 휴대폰번호를 입력해 주세요. (예: 010-1234-5678)');
+ if(!phone) return;
+ const digits=phone.replace(/\D/g,'');
+ if(digits.length<10){ alert('휴대폰번호를 확인해 주세요.'); return; }
+ const name=prompt('예약자 성함을 입력해 주세요.');
+ if(!name) return;
+ const mmdd=start.slice(5).replace('-','');
+ const bookingNumber=`${mmdd}-${digits.slice(-4)}`;
+ alert(`예약번호는 ${bookingNumber} 입니다.\n\n현재 v7은 네이버페이 승인 전 단계라 실제 HOLD/결제는 실행하지 않습니다. 승인 후 결제하기 버튼에 연결됩니다.`);
+};
+document.getElementById('lookupBtn').onclick=()=>{
+ const reservation=document.getElementById('lookupReservation').value.trim();
+ const phone=document.getElementById('lookupPhone').value.replace(/\D/g,'');
+ const msg=document.getElementById('lookupMessage');
+ if(!reservation||phone.length<10){msg.textContent='예약번호와 예약 시 입력한 휴대폰번호를 확인해 주세요.';return;}
+ msg.textContent='v7 백엔드 예약조회/취소신청 API가 준비되어 있습니다. 실제 결제 활성화 후 연결됩니다.';
+};
+render();
+loadAvailability();
+</script>
 </body>
 </html>
