@@ -482,9 +482,24 @@ function update(){
  }
  const extraGuests=Math.max(0,guests-baseGuestCount);
  const extraFee=extraGuests*extraGuestFeePerNight*nights;
- const total=roomTotal+extraFee;
+ let discountRate = 0;
+
+for (const rule of stayDiscounts) {
+  if (nights >= rule.nights) {
+    discountRate = rule.rate;
+    break;
+  }
+}
+
+const discountAmount = Math.round(roomTotal * discountRate);
+const total = roomTotal - discountAmount + extraFee;
  document.getElementById('total').textContent=`₩${KRW(total)}`;
- if(nights) document.getElementById('nightText').textContent=`${nights}박 · ${guests}명${extraFee?` · 추가인원 ₩${KRW(extraFee)}`:''}`;
+ if(nights) {
+  document.getElementById('nightText').textContent =
+    `${nights}박 · ${guests}명` +
+    `${discountRate ? ` · 연박 ${Math.round(discountRate * 100)}% 할인 (-₩${KRW(discountAmount)})` : ''}` +
+    `${extraFee ? ` · 추가인원 ₩${KRW(extraFee)}` : ''}`;
+}
  else if(start) document.getElementById('nightText').textContent=minStayFor(start)===1?(daysUntil(start)<=5?'임박 예약 · 1박 예약 가능':'자투리 공실 · 1박 예약 가능'):'최소 2박부터 예약 가능합니다';
  else document.getElementById('nightText').textContent='날짜를 선택해 주세요';
  document.getElementById('bookBtn').disabled=!end;
