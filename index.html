@@ -371,25 +371,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"Noto S
  </div>
 </div>
 
-<div class="modal-backdrop" id="lookupBackdrop" aria-hidden="true">
- <section class="lookup-modal" role="dialog" aria-modal="true" aria-labelledby="lookupTitle">
-  <button class="modal-close" id="closeLookup" type="button" aria-label="닫기">×</button>
-  <h3 id="lookupTitle">예약 조회 · 취소</h3>
-  <p class="sub">공식 홈페이지에서 예약한 내역을 확인하고 취소할 수 있습니다.</p>
-  <div class="lookup-grid">
-   <label><span class="field-label">예약번호</span><input class="field" id="lookupReservation" autocomplete="off" placeholder="예약번호 입력"></label>
-   <label><span class="field-label">휴대폰번호</span><input class="field" id="lookupPhone" inputmode="tel" autocomplete="tel" placeholder="01012345678"></label>
-  </div>
-  <button class="lookup-btn" id="lookupBtn" type="button">예약 조회</button>
-  <div class="lookup-note" id="lookupMessage">예약번호와 예약 시 입력한 휴대폰번호를 입력해 주세요.</div>
-  <div class="policy">
-   <strong>취소 · 환불 규정</strong><br>
-   체크인 14일 전까지 취소 시 100% 환불<br>
-   체크인 14일 전 ~ 7일 전 취소 시 50% 환불<br>
-   체크인 7일 전부터는 환불 불가
-  </div>
- </section>
-</div>
 
 <script src="prices.js"></script>
 <script>
@@ -521,33 +502,11 @@ document.getElementById('bookBtn').onclick=()=>{
  if(digits.length<10){ alert('휴대폰번호를 확인해 주세요.'); return; }
  const name=prompt('예약자 성함을 입력해 주세요.');
  if(!name) return;
- const mmdd=start.slice(5).replace('-','');
+ const mmdd=key(start).slice(5).replace('-','');
  const bookingNumber=`${mmdd}-${digits.slice(-4)}`;
  alert(`예약번호는 ${bookingNumber} 입니다.\n\n현재 v7은 네이버페이 승인 전 단계라 실제 HOLD/결제는 실행하지 않습니다. 승인 후 결제하기 버튼에 연결됩니다.`);
 };
-const lookupBackdrop=document.getElementById('lookupBackdrop');
-const openLookup=()=>{
- lookupBackdrop.classList.add('open');
- lookupBackdrop.setAttribute('aria-hidden','false');
- document.body.style.overflow='hidden';
- setTimeout(()=>document.getElementById('lookupReservation').focus(),0);
-};
-const closeLookup=()=>{
- lookupBackdrop.classList.remove('open');
- lookupBackdrop.setAttribute('aria-hidden','true');
- document.body.style.overflow='';
-};
-document.getElementById('openLookup').onclick=openLookup;
-document.getElementById('closeLookup').onclick=closeLookup;
-lookupBackdrop.onclick=e=>{if(e.target===lookupBackdrop)closeLookup()};
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&lookupBackdrop.classList.contains('open'))closeLookup()});
-document.getElementById('lookupBtn').onclick=()=>{
- const reservation=document.getElementById('lookupReservation').value.trim();
- const phone=document.getElementById('lookupPhone').value.replace(/\D/g,'');
- const msg=document.getElementById('lookupMessage');
- if(!reservation||phone.length<10){msg.textContent='예약번호와 예약 시 입력한 휴대폰번호를 확인해 주세요.';return;}
- msg.textContent='v7 백엔드 예약조회/취소신청 API가 준비되어 있습니다. 실제 결제 활성화 후 연결됩니다.';
-};
+
 render();
 loadAvailability();
  // Footer modal
