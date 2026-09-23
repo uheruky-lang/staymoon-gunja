@@ -61,6 +61,25 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"Noto S
 .note{text-align:center;font-size:10px;color:var(--muted);margin-top:12px}
 /* Footer + reservation lookup modal */
 .site-footer{max-width:720px;margin:0 auto;padding:30px 20px 48px;border-top:1px solid var(--line);color:var(--muted);font-size:10px;line-height:1.9}
+.footer-info{text-align:center;margin-bottom:14px}
+.footer-links{display:flex;justify-content:center;flex-wrap:wrap;gap:6px 12px}
+.footer-link{border:0;background:transparent;padding:0;color:var(--muted);font:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+.modal-backdrop{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.42);display:none;align-items:center;justify-content:center;padding:20px}
+.modal-backdrop.open{display:flex}
+.modal-panel{position:relative;width:min(620px,100%);max-height:82vh;overflow-y:auto;background:var(--paper);border-radius:16px;padding:30px 26px 28px;box-shadow:0 18px 60px rgba(0,0,0,.18)}
+.modal-close{position:absolute;right:16px;top:14px;border:0;background:transparent;font-size:25px;color:var(--ink);cursor:pointer}
+.modal-panel h2{margin:0 38px 24px 0;font:400 25px/1.3 Georgia,"Times New Roman",serif}
+.modal-panel h3{margin:25px 0 8px;font-size:13px}
+.modal-panel p{font-size:12px;line-height:1.85;margin:0 0 12px;color:#514c46}
+.modal-panel strong{color:var(--ink)}
+.modal-panel .lookup-grid{margin-top:20px}
+.modal-panel .lookup-btn{margin-bottom:4px}
+
+@media(max-width:700px){
+ .modal-backdrop{align-items:flex-end;padding:0}
+ .modal-panel{width:100%;max-height:88svh;border-radius:18px 18px 0 0;padding:28px 20px calc(26px + env(safe-area-inset-bottom))}
+}
 .footer-brand{color:var(--ink);font:400 14px Georgia,"Times New Roman",serif;letter-spacing:.06em;margin-bottom:8px}
 .footer-info{margin-bottom:10px}
 .footer-links{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
@@ -131,10 +150,226 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"Noto S
   사업자명 · 스테이문 &nbsp;|&nbsp; 대표자 · 김권택 &nbsp;|&nbsp; 사업자등록번호 · 463-25-02177
  </div>
  <div class="footer-links">
-  <button class="footer-link" id="openLookup" type="button">예약 조회 · 취소</button>
-  <span>이용약관</span><span>개인정보처리방침</span><span>취소 · 환불 규정</span>
+  <button class="footer-link" data-modal="termsModal">이용약관</button>
+  <button class="footer-link" data-modal="privacyModal">개인정보처리방침</button>
+  <button class="footer-link" data-modal="refundModal">취소 · 환불 규정</button>
+  <button class="footer-link" data-modal="lookupModal">예약 조회 · 취소</button>
  </div>
 </footer>
+ <!-- 이용약관 -->
+<div class="modal-backdrop" id="termsModal">
+ <div class="modal-panel">
+  <button class="modal-close" aria-label="닫기">×</button>
+
+  <h2>이용약관</h2>
+
+  <h3>제1조 목적</h3>
+  <p>본 약관은 스테이문 군자(이하 “숙소”)가 운영하는 웹사이트에서 제공하는 숙박 예약 및 관련 서비스의 이용조건과 이용자 및 숙소 운영자 간의 권리·의무를 정하는 것을 목적으로 합니다.</p>
+
+  <h3>제2조 예약 및 계약의 성립</h3>
+  <p>
+   1. 이용자는 웹사이트에서 숙박일, 이용 인원 및 예약 정보를 확인한 후 예약을 신청할 수 있습니다.<br>
+   2. 숙박 계약은 이용자가 예약 정보를 입력하고 결제를 완료한 후 예약확정 안내가 이루어진 시점에 성립합니다.<br>
+   3. 예약 과정에서 표시되는 숙박일, 인원, 숙박요금 및 취소·환불 조건을 확인한 후 결제를 진행해 주시기 바랍니다.<br>
+   4. 시스템 오류, 중복예약 또는 기타 정상적인 숙박 제공이 어려운 사유가 발생한 경우 운영자는 이용자에게 지체 없이 안내하고 결제금액을 환불합니다.
+  </p>
+
+  <h3>제3조 이용요금 및 결제</h3>
+  <p>
+   1. 숙박요금은 예약 시 웹사이트에 표시되는 금액을 기준으로 합니다.<br>
+   2. 기본 숙박요금은 기준 인원 4인을 포함하며, 5인부터는 추가 인원 1인당 1박 30,000원의 추가요금이 적용됩니다.<br>
+   3. 최대 이용 가능 인원은 8명입니다.<br>
+   4. 이용자는 웹사이트에서 제공하는 결제수단을 이용하여 숙박요금을 결제할 수 있습니다.
+  </p>
+
+  <h3>제4조 체크인 및 체크아웃</h3>
+  <p>
+   체크인: 오후 4시 이후<br>
+   체크아웃: 오전 11시까지<br>
+   얼리 체크인 및 레이트 체크아웃은 예약 상황에 따라 제한될 수 있습니다.
+  </p>
+
+  <h3>제5조 이용 인원</h3>
+  <p>
+   1. 예약 시 등록한 인원을 초과하여 숙소를 이용할 수 없습니다.<br>
+   2. 방문자를 포함하여 숙소를 실제 이용하는 인원은 사전에 운영자와 협의해야 합니다.<br>
+   3. 사전 협의 없이 예약 인원을 초과하여 이용하는 경우 추가요금이 발생하거나 이용이 제한될 수 있습니다.
+  </p>
+
+  <h3>제6조 숙소 이용 시 주의사항</h3>
+  <p>
+   숙소 내 금연 · 사전 협의되지 않은 파티 및 이벤트 금지 · 주변 거주자에게 피해를 줄 수 있는 과도한 소음 금지 · 시설 및 비품의 고의 또는 중대한 과실에 의한 훼손 금지 · 숙소에서 별도로 안내하는 안전 및 이용수칙을 준수해야 합니다.
+  </p>
+  <p>이용자의 고의 또는 과실로 시설이나 비품에 실제 손해가 발생한 경우 운영자는 손해 내용과 금액을 확인하여 이용자에게 배상을 요청할 수 있습니다.</p>
+
+  <h3>제7조 예약 변경</h3>
+  <p>숙박일, 이용 인원 등 예약 내용의 변경은 객실 예약 상황에 따라 가능 여부가 달라질 수 있습니다. 예약 변경을 원하는 경우 운영자에게 문의해 주시기 바랍니다.</p>
+
+  <h3>제8조 예약 취소 및 환불</h3>
+  <p>예약 취소 및 환불은 웹사이트에 게시된 「취소 · 환불 규정」에 따릅니다. 다만 관계 법령에 따라 이용자에게 더 유리한 기준이 적용되어야 하는 경우에는 해당 법령이 우선합니다.</p>
+
+  <h3>제9조 운영자의 계약 취소</h3>
+  <p>천재지변, 시설의 중대한 고장, 안전상의 문제 또는 기타 정상적인 숙박 제공이 불가능한 경우 운영자는 이용자에게 이를 안내하고 관계 법령 및 적용 가능한 기준에 따라 처리합니다.</p>
+
+  <h3>제10조 분쟁 해결</h3>
+  <p>본 약관과 관련하여 분쟁이 발생한 경우 운영자와 이용자는 원만한 해결을 위해 협의하며, 협의가 이루어지지 않는 경우 관계 법령 및 관할 법원의 절차에 따릅니다.</p>
+
+  <h3>제11조 사업자 정보 및 문의</h3>
+  <p>
+   상호: [사업자 상호]<br>
+   대표자: [대표자명]<br>
+   사업자등록번호: [사업자등록번호]<br>
+   통신판매업 신고번호: [통신판매업 신고번호]<br>
+   사업장 주소: [사업장 주소]<br>
+   연락처: [전화번호]<br>
+   이메일: [이메일]
+  </p>
+
+  <p>시행일: 2026년 [ ]월 [ ]일</p>
+ </div>
+</div>
+
+
+<!-- 개인정보처리방침 -->
+<div class="modal-backdrop" id="privacyModal">
+ <div class="modal-panel">
+  <button class="modal-close" aria-label="닫기">×</button>
+
+  <h2>개인정보처리방침</h2>
+
+  <p>스테이문 군자(이하 “운영자”)는 이용자의 개인정보를 중요하게 생각하며 「개인정보 보호법」 등 관계 법령을 준수합니다.</p>
+
+  <h3>1. 개인정보의 처리 목적</h3>
+  <p>
+   숙박 예약의 접수 및 확인, 예약자 본인 확인 및 예약 조회, 결제 및 취소·환불 처리, 체크인 및 숙소 이용 안내, 예약 변경 및 고객 문의 대응, 분쟁 처리 및 거래 기록 확인, 법령상 의무 이행을 위해 개인정보를 처리합니다.
+  </p>
+
+  <h3>2. 처리하는 개인정보 항목</h3>
+  <p>
+   <strong>예약 시</strong><br>
+   필수항목: 예약자 이름, 휴대전화번호, 숙박일, 이용 인원, 예약번호<br>
+   선택항목: 이메일 주소
+  </p>
+  <p>
+   <strong>결제 시</strong><br>
+   결제수단, 결제금액, 결제 승인정보 등 결제 처리에 필요한 정보가 결제서비스 제공자를 통해 처리될 수 있습니다.
+  </p>
+  <p>운영자는 이용자의 카드번호 등 결제수단의 핵심 인증정보를 직접 저장하지 않습니다.</p>
+
+  <h3>3. 개인정보의 보유 및 이용기간</h3>
+  <p>운영자는 원칙적으로 개인정보의 처리 목적이 달성되면 해당 개인정보를 지체 없이 파기합니다.</p>
+  <p>다만 계약 또는 청약철회, 대금결제, 재화·서비스 공급 등 관계 법령에 따라 일정 기간 보존할 의무가 있는 정보는 해당 법령에서 정한 기간 동안 별도로 보관한 후 파기합니다.</p>
+  <p>고객 문의 또는 분쟁이 진행 중인 경우에는 해당 업무가 종료될 때까지 관련 정보를 필요한 범위에서 보관할 수 있습니다.</p>
+
+  <h3>4. 개인정보의 제3자 제공</h3>
+  <p>운영자는 원칙적으로 이용자의 개인정보를 명시한 목적의 범위 내에서 처리하며, 이용자의 동의 또는 법률상 근거 없이 개인정보를 제3자에게 제공하지 않습니다.</p>
+
+  <h3>5. 개인정보 처리의 위탁 및 결제서비스</h3>
+  <p>
+   결제서비스 제공자: 네이버파이낸셜 주식회사(네이버페이)<br>
+   처리 목적: 숙박요금 결제, 결제 확인, 취소 및 환불 처리<br>
+   처리 정보: 결제에 필요한 거래정보
+  </p>
+
+  <h3>6. 개인정보의 파기</h3>
+  <p>개인정보의 보유기간이 경과하거나 처리 목적이 달성된 경우 해당 개인정보를 지체 없이 파기합니다.</p>
+  <p>전자적 파일 형태의 개인정보는 복구하기 어려운 방법으로 삭제하며, 관계 법령에 따라 보존해야 하는 개인정보는 다른 개인정보와 분리하여 보관하고 보존기간이 종료되면 파기합니다.</p>
+
+  <h3>7. 이용자의 권리</h3>
+  <p>이용자는 자신의 개인정보에 대해 열람, 정정, 삭제 또는 처리정지를 요청할 수 있습니다. 다만 관계 법령에 따라 보존이 필요한 정보는 해당 기간 동안 삭제가 제한될 수 있습니다.</p>
+
+  <h3>8. 개인정보의 안전성 확보조치</h3>
+  <p>운영자는 개인정보의 분실, 도난, 유출, 변조 또는 훼손을 방지하기 위하여 접근권한 관리, 개인정보 접근 제한 등 필요한 보호조치를 시행합니다.</p>
+
+  <h3>9. 개인정보 보호 문의처</h3>
+  <p>
+   개인정보 보호 담당자: [대표자 또는 담당자명]<br>
+   연락처: [전화번호]<br>
+   이메일: [이메일]
+  </p>
+  <p>개인정보 침해에 대한 상담 또는 신고가 필요한 경우 개인정보침해신고센터(국번 없이 118) 등 관련 기관에 문의할 수 있습니다.</p>
+
+  <h3>10. 개인정보처리방침의 변경</h3>
+  <p>본 개인정보처리방침의 내용이 변경되는 경우 웹사이트를 통해 변경 내용을 안내합니다.</p>
+
+  <p>시행일: 2026년 [ ]월 [ ]일</p>
+ </div>
+</div>
+
+
+<!-- 취소 · 환불 규정 -->
+<div class="modal-backdrop" id="refundModal">
+ <div class="modal-panel">
+  <button class="modal-close" aria-label="닫기">×</button>
+
+  <h2>취소 · 환불 규정</h2>
+
+  <p>스테이문 군자의 예약 취소 및 환불 기준은 아래와 같습니다. 예약 전 반드시 내용을 확인해 주세요.</p>
+
+  <h3>1. 기본 환불 기준</h3>
+  <p>
+   <strong>체크인 14일 전까지</strong><br>
+   결제금액의 100% 환불
+  </p>
+  <p>
+   <strong>체크인 14일 전부터 7일 전까지</strong><br>
+   결제금액의 50% 환불
+  </p>
+  <p>
+   <strong>체크인 7일 전부터 체크인 당일 및 이후</strong><br>
+   환불 불가
+  </p>
+
+  <h3>2. 취소 기준 시점</h3>
+  <p>취소 시점은 숙소가 예약 취소 요청을 접수한 시각을 기준으로 하며 대한민국 표준시(KST)를 기준으로 합니다.</p>
+
+  <h3>3. 예약 변경</h3>
+  <p>숙박일 또는 이용 인원의 변경은 예약 가능 여부에 따라 제한될 수 있습니다. 예약 변경이 필요한 경우 운영자에게 문의해 주세요.</p>
+
+  <h3>4. 운영자 사유로 인한 취소</h3>
+  <p>시설 고장, 안전상의 문제 또는 운영자의 사정으로 예약된 숙박을 제공할 수 없는 경우 이용자에게 이를 안내하고 해당 예약의 결제금액을 전액 환불합니다.</p>
+
+  <h3>5. 천재지변 및 불가항력</h3>
+  <p>천재지변, 정부기관의 통제 등 당사자가 합리적으로 통제하기 어려운 사유가 발생한 경우 관계 법령 및 적용 가능한 소비자분쟁해결기준 등을 고려하여 취소 및 환불 여부를 처리합니다.</p>
+
+  <h3>6. 환불 방법</h3>
+  <p>환불은 원칙적으로 결제에 사용한 결제수단을 통해 처리합니다. 결제수단 또는 결제서비스 제공자의 처리 절차에 따라 실제 환불 완료 시점에는 차이가 있을 수 있습니다.</p>
+
+  <h3>7. 관계 법령과의 관계</h3>
+  <p>본 취소 · 환불 규정에도 불구하고 관계 법령 또는 강행규정에 따라 이용자에게 더 유리한 취소·환불 기준이 적용되어야 하는 경우에는 해당 기준을 우선 적용합니다.</p>
+
+  <p>시행일: 2026년 [ ]월 [ ]일</p>
+ </div>
+</div>
+
+
+<!-- 예약 조회 · 취소 -->
+<div class="modal-backdrop" id="lookupModal">
+ <div class="modal-panel">
+  <button class="modal-close" aria-label="닫기">×</button>
+
+  <h2>예약 조회 · 취소</h2>
+  <p>공식 홈페이지에서 예약한 내역을 조회할 수 있습니다.</p>
+
+  <div class="lookup-grid">
+   <label>
+    <span class="field-label">예약번호</span>
+    <input class="field" id="lookupReservation" autocomplete="off" placeholder="예약번호 입력">
+   </label>
+
+   <label>
+    <span class="field-label">휴대폰번호</span>
+    <input class="field" id="lookupPhone" inputmode="tel" autocomplete="tel" placeholder="01012345678">
+   </label>
+  </div>
+
+  <button class="lookup-btn" id="lookupBtn">예약 조회</button>
+
+  <div class="lookup-note" id="lookupMessage">
+   예약번호는 체크인 월일 + 휴대폰 뒤 4자리입니다. 예: 1020-5678
+  </div>
+ </div>
+</div>
 
 <div class="modal-backdrop" id="lookupBackdrop" aria-hidden="true">
  <section class="lookup-modal" role="dialog" aria-modal="true" aria-labelledby="lookupTitle">
@@ -315,6 +550,33 @@ document.getElementById('lookupBtn').onclick=()=>{
 };
 render();
 loadAvailability();
+ // Footer modal
+document.querySelectorAll('[data-modal]').forEach(button=>{
+  button.addEventListener('click',()=>{
+    const modal=document.getElementById(button.dataset.modal);
+    if(modal) modal.classList.add('open');
+  });
+});
+
+document.querySelectorAll('.modal-close').forEach(button=>{
+  button.addEventListener('click',()=>{
+    button.closest('.modal-backdrop').classList.remove('open');
+  });
+});
+
+document.querySelectorAll('.modal-backdrop').forEach(modal=>{
+  modal.addEventListener('click',e=>{
+    if(e.target===modal) modal.classList.remove('open');
+  });
+});
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    document.querySelectorAll('.modal-backdrop.open').forEach(modal=>{
+      modal.classList.remove('open');
+    });
+  }
+});
 </script>
 </body>
 </html>
