@@ -59,18 +59,25 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"Noto S
 .bookbtn{width:100%;border:0;border-radius:12px;background:#26231f;color:white;padding:17px;font-size:15px;cursor:pointer}
 .bookbtn:disabled{background:#c9c5bf;cursor:not-allowed}
 .note{text-align:center;font-size:10px;color:var(--muted);margin-top:12px}
-.account{max-width:720px;margin:0 auto;padding:0 20px 90px}
-.account-card{border-top:1px solid var(--line);padding-top:38px}
-.account h3{margin:0 0 8px;font:400 22px/1.2 Georgia,"Times New Roman",serif;letter-spacing:.04em}
-.account .sub{margin:0 0 22px;color:var(--muted);font-size:12px;line-height:1.6}
+/* Footer + reservation lookup modal */
+.site-footer{max-width:720px;margin:0 auto;padding:30px 20px 48px;border-top:1px solid var(--line);color:var(--muted);font-size:10px;line-height:1.9}
+.footer-brand{color:var(--ink);font:400 14px Georgia,"Times New Roman",serif;letter-spacing:.06em;margin-bottom:8px}
+.footer-info{margin-bottom:10px}
+.footer-links{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+.footer-link{border:0;background:transparent;padding:0;color:var(--muted);font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.modal-backdrop{position:fixed;inset:0;z-index:20;background:rgba(20,18,16,.48);display:none;align-items:center;justify-content:center;padding:20px}
+.modal-backdrop.open{display:flex}
+.lookup-modal{position:relative;width:min(520px,100%);max-height:min(720px,calc(100svh - 40px));overflow:auto;background:var(--paper);border-radius:18px;padding:30px;box-shadow:0 24px 70px rgba(0,0,0,.22)}
+.modal-close{position:absolute;right:16px;top:14px;width:38px;height:38px;border:0;background:transparent;color:var(--ink);font-size:25px;line-height:1;cursor:pointer}
+.lookup-modal h3{margin:0 42px 8px 0;font:400 22px/1.2 Georgia,"Times New Roman",serif;letter-spacing:.04em}
+.lookup-modal .sub{margin:0 0 22px;color:var(--muted);font-size:12px;line-height:1.6}
 .lookup-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .field{border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:transparent;width:100%;font:inherit;color:var(--ink)}
 .field-label{display:block;color:var(--muted);font-size:10px;margin:0 0 6px}
 .lookup-btn{margin-top:10px;width:100%;border:1px solid var(--ink);border-radius:12px;background:transparent;color:var(--ink);padding:14px;font-size:13px;cursor:pointer}
 .lookup-note{font-size:10px;color:var(--muted);margin-top:10px;line-height:1.5}
-.policy{margin-top:28px;padding:18px;border-radius:12px;background:#efebe5;font-size:12px;line-height:1.8}
+.policy{margin-top:24px;padding:18px;border-radius:12px;background:#efebe5;font-size:12px;line-height:1.8}
 .policy strong{font-weight:600}
-.site-footer{max-width:720px;margin:0 auto;padding:0 20px 48px;color:var(--muted);font-size:10px;line-height:1.8}
 
 @media(max-width:700px){
  .slide{inset:0;transform:scale(1.04);animation-duration:35s}
@@ -80,6 +87,8 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"Noto S
  .booking{padding-top:52px}
  .lookup-grid{grid-template-columns:1fr}
  .day{min-height:62px}
+ .modal-backdrop{align-items:flex-end;padding:0}
+ .lookup-modal{width:100%;max-height:86svh;border-radius:20px 20px 0 0;padding:28px 20px max(28px,env(safe-area-inset-bottom))}
 }
 @keyframes panLR{0%{opacity:0;background-position:25% center;transform:scale(1.05)}6%{opacity:1}20%{opacity:1;background-position:76% center;transform:scale(1.08)}26%{opacity:0;background-position:82% center}100%{opacity:0}}
 @keyframes panRL{0%{opacity:0;background-position:78% center;transform:scale(1.05)}6%{opacity:1}20%{opacity:1;background-position:24% center;transform:scale(1.08)}26%{opacity:0;background-position:18% center}100%{opacity:0}}
@@ -114,25 +123,38 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"Noto S
  </div>
 </section>
 
-<section class="account" id="reservationLookup">
- <div class="account-card">
-  <h3>예약 조회 · 취소 신청</h3>
-  <p class="sub">공식 홈페이지 예약을 조회하고 취소 신청을 접수할 수 있습니다. 취소는 운영자 확인 후 처리됩니다.</p>
+<footer class="site-footer">
+ <div class="footer-brand">STAY MOON GUNJA</div>
+ <div class="footer-info">
+  사업장 주소 · [주소 입력]<br>
+  예약 및 문의 · [연락처 입력]<br>
+  사업자명 · [사업자명 입력] &nbsp;|&nbsp; 대표자 · [대표자명 입력] &nbsp;|&nbsp; 사업자등록번호 · [사업자등록번호 입력]
+ </div>
+ <div class="footer-links">
+  <button class="footer-link" id="openLookup" type="button">예약 조회 · 취소</button>
+  <span>이용약관</span><span>개인정보처리방침</span><span>취소 · 환불 규정</span>
+ </div>
+</footer>
+
+<div class="modal-backdrop" id="lookupBackdrop" aria-hidden="true">
+ <section class="lookup-modal" role="dialog" aria-modal="true" aria-labelledby="lookupTitle">
+  <button class="modal-close" id="closeLookup" type="button" aria-label="닫기">×</button>
+  <h3 id="lookupTitle">예약 조회 · 취소</h3>
+  <p class="sub">공식 홈페이지에서 예약한 내역을 확인하고 취소할 수 있습니다.</p>
   <div class="lookup-grid">
    <label><span class="field-label">예약번호</span><input class="field" id="lookupReservation" autocomplete="off" placeholder="예약번호 입력"></label>
    <label><span class="field-label">휴대폰번호</span><input class="field" id="lookupPhone" inputmode="tel" autocomplete="tel" placeholder="01012345678"></label>
   </div>
-  <button class="lookup-btn" id="lookupBtn">예약 조회</button>
-  <div class="lookup-note" id="lookupMessage">예약번호는 체크인 월일 + 휴대폰 뒤 4자리입니다. 예: 1020-5678</div>
+  <button class="lookup-btn" id="lookupBtn" type="button">예약 조회</button>
+  <div class="lookup-note" id="lookupMessage">예약번호와 예약 시 입력한 휴대폰번호를 입력해 주세요.</div>
   <div class="policy">
-   <strong>취소 신청 · 환불 규정</strong><br>
+   <strong>취소 · 환불 규정</strong><br>
    체크인 14일 전까지 취소 시 100% 환불<br>
    체크인 14일 전 ~ 7일 전 취소 시 50% 환불<br>
    체크인 7일 전부터는 환불 불가
   </div>
- </div>
-</section>
-<footer class="site-footer">Stay Moon Gunja · 공식 예약 사이트</footer>
+ </section>
+</div>
 
 <script src="prices.js"></script>
 <script>
@@ -268,6 +290,22 @@ document.getElementById('bookBtn').onclick=()=>{
  const bookingNumber=`${mmdd}-${digits.slice(-4)}`;
  alert(`예약번호는 ${bookingNumber} 입니다.\n\n현재 v7은 네이버페이 승인 전 단계라 실제 HOLD/결제는 실행하지 않습니다. 승인 후 결제하기 버튼에 연결됩니다.`);
 };
+const lookupBackdrop=document.getElementById('lookupBackdrop');
+const openLookup=()=>{
+ lookupBackdrop.classList.add('open');
+ lookupBackdrop.setAttribute('aria-hidden','false');
+ document.body.style.overflow='hidden';
+ setTimeout(()=>document.getElementById('lookupReservation').focus(),0);
+};
+const closeLookup=()=>{
+ lookupBackdrop.classList.remove('open');
+ lookupBackdrop.setAttribute('aria-hidden','true');
+ document.body.style.overflow='';
+};
+document.getElementById('openLookup').onclick=openLookup;
+document.getElementById('closeLookup').onclick=closeLookup;
+lookupBackdrop.onclick=e=>{if(e.target===lookupBackdrop)closeLookup()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&lookupBackdrop.classList.contains('open'))closeLookup()});
 document.getElementById('lookupBtn').onclick=()=>{
  const reservation=document.getElementById('lookupReservation').value.trim();
  const phone=document.getElementById('lookupPhone').value.replace(/\D/g,'');
