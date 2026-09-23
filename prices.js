@@ -12,3 +12,8 @@ const closedDates=[
 const extraGuestFeePerNight=30000;
 const baseGuestCount=4;
 const maxGuestCount=8;
+const stayDiscounts = [
+  { nights: 7, rate: 0.10 },
+  { nights: 5, rate: 0.07 },
+  { nights: 3, rate: 0.04 }
+];
