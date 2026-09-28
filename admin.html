@@ -1,0 +1,20 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Stay Moon 입금 관리</title>
+<style>body{font-family:Arial,sans-serif;background:#f7f5f1;color:#26231f;max-width:600px;margin:40px auto;padding:20px}label{display:block;margin:16px 0}input,button{box-sizing:border-box;width:100%;padding:14px;margin-top:6px;font:inherit}button{cursor:pointer}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#eae5dc;padding:20px}small{line-height:1.7}</style>
+<h1>Stay Moon 입금 관리</h1><p>실제 은행 입금 내역을 확인한 뒤 예약을 확정하세요.</p>
+<label>관리자 인증키<input id="token" type="password" autocomplete="off"></label>
+<label>예약번호<input id="number" autocomplete="off"></label>
+<button id="lookup">예약 조회</button><pre id="result" role="status">예약을 먼저 조회해 주세요.</pre>
+<label>실제 입금 확인액 (원)<input id="amount" type="number" min="0" step="1"></label>
+<button id="confirm">입금 확인 · 예약 확정</button>
+<hr><label>실제 환불 완료액 (원)<input id="refund" type="number" min="0" step="1"></label>
+<label><input id="sent" type="checkbox" style="width:auto"> 실제 환불을 완료했습니다. 0원일 때는 적용 규정을 확인했습니다.</label>
+<button id="cancel">예약 취소 · 환불 완료 기록</button>
+<p><small>이 화면은 은행 이체를 실행하지 않습니다. 환불은 은행에서 직접 처리한 뒤 기록합니다. 인증키는 저장하지 않으며 화면을 닫으면 사라집니다. 입금 기한이 지난 예약은 자동 확정되지 않습니다.</small></p>
+<script src="payment-config.js"></script><script>
+const $=id=>document.getElementById(id);let working=false;
+async function action(path,extra={}){if(working)return;working=true;document.querySelectorAll('button').forEach(b=>b.disabled=true);
+try{const r=await fetch(window.STAYMOON_CONFIG.apiBase+'/admin/'+path,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+$('token').value},body:JSON.stringify({bookingNumber:$('number').value.trim(),...extra}),signal:AbortSignal.timeout(20000)});const d=await r.json();if(!r.ok||!d.success)throw new Error(d.error);const x=d.reservation;$('result').textContent=`${x.bookingNumber}\n${x.name} · ${x.checkIn} → ${x.checkOut}\n예약 ${x.reservationStatus} / 결제 ${x.paymentStatus}\n결제액 ${x.paymentAmount.toLocaleString('ko-KR')}원\n취소신청 ${x.cancelRequestedAt||'없음'}\n입금기한 ${x.holdExpiresAt||'-'}`;}
+catch(e){$('result').textContent=e.message;}finally{working=false;document.querySelectorAll('button').forEach(b=>b.disabled=false);}}
+$('lookup').onclick=()=>action('lookup');$('confirm').onclick=()=>{if($('amount').value&&confirm('실제 입금 내역과 금액을 확인했습니까?'))action('confirm-bank',{receivedAmount:Number($('amount').value)});};
+$('cancel').onclick=()=>{if($('refund').value&&$('sent').checked&&confirm('실제 환불 완료 내역을 기록하고 예약을 취소할까요?'))action('cancel-refund',{refundAmount:Number($('refund').value),refundSent:true});};
+</script></html>

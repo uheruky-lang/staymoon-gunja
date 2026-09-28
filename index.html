@@ -80,13 +80,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"Noto S
  .modal-backdrop{align-items:flex-end;padding:0}
  .modal-panel{width:100%;max-height:88svh;border-radius:18px 18px 0 0;padding:28px 20px calc(26px + env(safe-area-inset-bottom))}
 }
-.footer-brand{
-  color:var(--ink);
-  font:400 14px Georgia,"Times New Roman",serif;
-  letter-spacing:.06em;
-  margin-bottom:8px;
-  text-align:center;
-}
+.footer-brand{color:var(--ink);font:400 14px Georgia,"Times New Roman",serif;letter-spacing:.06em;margin-bottom:8px}
 .footer-info{margin-bottom:10px}
 .footer-links{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
 .footer-link{border:0;background:transparent;padding:0;color:var(--muted);font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
@@ -119,6 +113,13 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"Noto S
 @keyframes panRL{0%{opacity:0;background-position:78% center;transform:scale(1.05)}6%{opacity:1}20%{opacity:1;background-position:24% center;transform:scale(1.08)}26%{opacity:0;background-position:18% center}100%{opacity:0}}
 @keyframes zoomSoft{0%{opacity:0;background-position:center;transform:scale(1.09)}6%{opacity:1}20%{opacity:1;transform:scale(1.035)}26%{opacity:0}100%{opacity:0}}
 @media(prefers-reduced-motion:reduce){.slide{animation:none}.slide:first-child{opacity:1}}
+
+.payment-choice{display:block;width:100%;padding:22px 20px;margin:12px 0;border:1px solid var(--ink);border-radius:14px;background:#fff;text-align:left;color:var(--ink);cursor:pointer}
+.payment-choice strong{display:block;font-size:19px;margin-bottom:8px}.payment-choice span{font-size:12px;line-height:1.6}
+.payment-choice:disabled{border-color:var(--line);background:#efede9;cursor:not-allowed}.npay{color:#087c37!important}
+.checkout-summary,.bank-details{background:#ebe7df;padding:18px;border-radius:12px;line-height:1.9;font-size:14px;white-space:pre-line;overflow-wrap:anywhere}
+.checkout-error{color:#a22d26!important;min-height:1.5em;margin-top:14px!important}.consent{display:block;font-size:12px;line-height:1.8;margin:16px 0}.checkout-fields{display:grid;gap:14px}
+button:focus-visible,input:focus-visible{outline:3px solid #906e3d;outline-offset:3px}[hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -144,12 +145,12 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"Noto S
   <div class="guests"><div><small style="color:#8d877f">GUESTS</small><div style="font-size:13px;margin-top:4px">인원</div></div><div class="counter"><button id="minus">−</button><strong id="guestCount">2</strong><button id="plus">+</button></div></div>
   <div class="total"><div><span id="nightText">날짜를 선택해 주세요</span></div><strong id="total">₩0</strong></div>
   <button class="bookbtn" id="bookBtn" disabled>예약하기</button>
-  <div class="note">결제 기능은 다음 단계에서 네이버페이와 연결됩니다.</div>
+  <div class="note" id="availabilityMessage" role="status">계좌이체로 예약할 수 있습니다. 입금 확인 후 예약이 확정됩니다.</div>
  </div>
 </section>
 
 <footer class="site-footer">
- <div class="footer-brand">STAY MOON GUNJA</div>
+ <div class="footer-brand" style="text-align:center">STAY MOON GUNJA</div>
  <div class="footer-info">
   사업장 주소 · 서울시 광진구 능동로 32길 6번지 3층 <br>
   예약 및 문의 · 010-9155-8007<br>
@@ -222,16 +223,16 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"Noto S
 
   <h3>제11조 사업자 정보 및 문의</h3>
   <p>
-   상호: 스테이문 <br>
-   대표자: 김권택 <br>
-   사업자등록번호: 463-25-02177<br>
+   상호: [사업자 상호]<br>
+   대표자: [대표자명]<br>
+   사업자등록번호: [사업자등록번호]<br>
    통신판매업 신고번호: [통신판매업 신고번호]<br>
-   사업장 주소: 서울시 광진구 능동로 32길 6 3층 <br>
-   연락처: 010-9155-8007<br>
-   이메일: uheruky@gmail.com
+   사업장 주소: [사업장 주소]<br>
+   연락처: [전화번호]<br>
+   이메일: [이메일]
   </p>
 
-  <p>시행일: 2026년 10월 1일</p>
+  <p>시행일: 2026년 [ ]월 [ ]일</p>
  </div>
 </div>
 
@@ -289,16 +290,16 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"Noto S
 
   <h3>9. 개인정보 보호 문의처</h3>
   <p>
-   개인정보 보호 담당자: 이문희 <br>
-   연락처: 010-9155-8007<br>
-   이메일: uheruky@gmail.com
+   개인정보 보호 담당자: [대표자 또는 담당자명]<br>
+   연락처: [전화번호]<br>
+   이메일: [이메일]
   </p>
   <p>개인정보 침해에 대한 상담 또는 신고가 필요한 경우 개인정보침해신고센터(국번 없이 118) 등 관련 기관에 문의할 수 있습니다.</p>
 
   <h3>10. 개인정보처리방침의 변경</h3>
   <p>본 개인정보처리방침의 내용이 변경되는 경우 웹사이트를 통해 변경 내용을 안내합니다.</p>
 
-  <p>시행일: 2026년 10월 1일</p>
+  <p>시행일: 2026년 [ ]월 [ ]일</p>
  </div>
 </div>
 
@@ -344,7 +345,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"Noto S
   <h3>7. 관계 법령과의 관계</h3>
   <p>본 취소 · 환불 규정에도 불구하고 관계 법령 또는 강행규정에 따라 이용자에게 더 유리한 취소·환불 기준이 적용되어야 하는 경우에는 해당 기준을 우선 적용합니다.</p>
 
-  <p>시행일: 2026년 10월 1일</p>
+  <p>시행일: 2026년 [ ]월 [ ]일</p>
  </div>
 </div>
 
@@ -372,16 +373,54 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:Arial,"Noto S
   <button class="lookup-btn" id="lookupBtn">예약 조회</button>
 
   <div class="lookup-note" id="lookupMessage">
-   예약번호는 체크인 월일 + 휴대폰 뒤 4자리입니다. 예: 1020-5678
+   예약 신청 후 안내받은 예약번호와 휴대폰번호를 입력해 주세요.
   </div>
  </div>
 </div>
 
 
-<script src="prices.js"></script>
+<div class="modal-backdrop" id="checkoutModal">
+ <section class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+  <button class="modal-close" type="button" aria-label="닫기">×</button>
+  <h2 id="checkoutTitle">예약자 정보 · 최종 확인</h2>
+  <div id="checkoutInput">
+   <div class="checkout-summary" id="checkoutSummary"></div>
+   <form id="guestForm" class="checkout-fields" style="margin-top:20px">
+    <label><span class="field-label">예약자 이름 *</span><input class="field" name="name" autocomplete="name" maxlength="80" required></label>
+    <label><span class="field-label">휴대폰번호 *</span><input class="field" name="phone" type="tel" autocomplete="tel" maxlength="20" required placeholder="010-1234-5678"></label>
+    <label><span class="field-label">이메일 (선택)</span><input class="field" name="email" type="email" autocomplete="email" maxlength="254"></label>
+    <label class="consent"><input type="checkbox" name="consent" required> [필수] 이용약관과 취소·환불 규정을 확인하고 예약을 신청합니다.</label>
+    <div><button class="footer-link" type="button" data-modal="termsModal">이용약관 보기</button> · <button class="footer-link" type="button" data-modal="refundModal">취소·환불 규정 보기</button> · <button class="footer-link" type="button" data-modal="privacyModal">개인정보처리방침 보기</button></div>
+    <p>예약 처리를 위해 이름·휴대폰번호와 선택 입력한 이메일을 사용합니다. 자세한 내용은 개인정보처리방침을 확인해 주세요.</p>
+    <button class="bookbtn" type="submit">최종 금액 확인 · 결제수단 선택</button>
+   </form>
+   <div id="paymentMethods" hidden>
+    <h3>결제수단을 선택해 주세요</h3>
+    <p id="guestReview"></p>
+    <button class="payment-choice" id="bankTransfer" type="button"><strong>계좌이체</strong><span>예약 신청 후 입금 계좌를 안내합니다.<br>입금 확인 후 예약이 확정됩니다.</span></button>
+    <button class="payment-choice" id="naverPay" type="button" disabled><strong class="npay">N Pay 네이버페이 · 준비 중</strong><span>서비스 준비가 완료되면 이용할 수 있습니다.</span></button>
+    <button class="lookup-btn" id="editGuest" type="button">예약자 정보 수정</button>
+   </div>
+  </div>
+  <div id="bankResult" hidden>
+   <p>아직 예약이 확정되지 않았습니다. 아래 기한까지 입금해 주세요.</p>
+   <div class="bank-details" id="bankDetails"></div>
+   <p id="holdCountdown" role="status"></p>
+   <p>입금자명은 예약자 이름과 동일하게 입력해 주세요. 입금 후 확인이 늦어지거나 기한이 지난 경우 추가 입금하지 말고 <a href="tel:01091558007">010-9155-8007</a>로 문의해 주세요.</p>
+   <button class="lookup-btn" id="copyBooking" type="button">예약번호 복사</button>
+   <button class="lookup-btn" id="refreshReservation" type="button">입금 확인 상태 조회</button>
+  </div>
+  <p class="checkout-error" id="checkoutMessage" role="alert"></p>
+ </section>
+</div>
+
+<script src="payment-config.js"></script>
 <script>
 const KRW=n=>new Intl.NumberFormat('ko-KR').format(n);
-const today=new Date(); today.setHours(0,0,0,0);
+const koreaDate=new Date(Date.now()+9*3600000).toISOString().slice(0,10);
+const today=new Date(koreaDate+'T00:00:00');
+let defaultPrices={},specialPrices={},closedDates=[],baseGuestCount=4,maxGuestCount=8,extraGuestFeePerNight=0,stayDiscounts=[];
+let pricingLoaded=false;
 const limit=new Date(today); limit.setDate(limit.getDate()+60);
 let view=new Date(today.getFullYear(),today.getMonth(),1);
 let start=null,end=null,guests=2;
@@ -389,11 +428,11 @@ let start=null,end=null,guests=2;
 function price(d){
  const sp=specialPrices[key(d)];
  if(sp!=null)return sp;
- return defaultPrices[['sun','mon','tue','wed','thu','fri','sat'][d.getDay()]];
+ return defaultPrices[['sun','mon','tue','wed','thu','fri','sat'][d.getDay()]]||0;
 }
 
 // Live availability from Stay Moon Cloudflare Worker (Airbnb iCal proxy)
-const AVAILABILITY_API='https://staymoon-api.uheruky.workers.dev/';
+const AVAILABILITY_API=window.STAYMOON_CONFIG.apiBase.replace(/\/$/,'')+'/';
 const booked=new Set();
 let availabilityLoaded=false;
 
@@ -488,75 +527,23 @@ function update(){
  }
  const extraGuests=Math.max(0,guests-baseGuestCount);
  const extraFee=extraGuests*extraGuestFeePerNight*nights;
- let discountRate = 0;
-
-for (const rule of stayDiscounts) {
-  if (nights >= rule.nights) {
-    discountRate = rule.rate;
-    break;
-  }
-}
-
-const discountAmount = Math.round(roomTotal * discountRate);
-const total = roomTotal - discountAmount + extraFee;
+ const discountRate=[...stayDiscounts].sort((a,b)=>b.nights-a.nights).find(r=>nights>=r.nights)?.rate||0;
+ const discountAmount=Math.round(roomTotal*discountRate);
+ const total=roomTotal-discountAmount+extraFee;
  document.getElementById('total').textContent=`₩${KRW(total)}`;
- if(nights) {
-  document.getElementById('nightText').textContent =
-    `${nights}박 · ${guests}명` +
-    `${discountRate ? ` · 연박 ${Math.round(discountRate * 100)}% 할인 (-₩${KRW(discountAmount)})` : ''}` +
-    `${extraFee ? ` · 추가인원 ₩${KRW(extraFee)}` : ''}`;
-}
+ if(nights) document.getElementById('nightText').textContent=`${nights}박 · ${guests}명${discountRate?` · 연박 ${Math.round(discountRate*100)}% 할인`:""}${extraFee?` · 추가인원 ₩${KRW(extraFee)}`:''}`;
  else if(start) document.getElementById('nightText').textContent=minStayFor(start)===1?(daysUntil(start)<=5?'임박 예약 · 1박 예약 가능':'자투리 공실 · 1박 예약 가능'):'최소 2박부터 예약 가능합니다';
  else document.getElementById('nightText').textContent='날짜를 선택해 주세요';
- document.getElementById('bookBtn').disabled=!end;
+ let valid=!!(start&&end&&availabilityLoaded&&pricingLoaded);
+ if(valid){for(let d=new Date(start);d<end;d.setDate(d.getDate()+1)){if(isBlocked(d)){valid=false;break}}}
+ document.getElementById('bookBtn').disabled=!valid;
 }
 document.getElementById('prev').onclick=()=>{const p=new Date(view.getFullYear(),view.getMonth()-1,1);if(p>=new Date(today.getFullYear(),today.getMonth(),1)){view=p;render()}};
 document.getElementById('next').onclick=()=>{const n=new Date(view.getFullYear(),view.getMonth()+1,1);if(n<=new Date(limit.getFullYear(),limit.getMonth(),1)){view=n;render()}};
 document.getElementById('minus').onclick=()=>{guests=Math.max(1,guests-1);document.getElementById('guestCount').textContent=guests;update()};
 document.getElementById('plus').onclick=()=>{guests=Math.min(maxGuestCount,guests+1);document.getElementById('guestCount').textContent=guests;update()};
 document.querySelector('.scroll').onclick=()=>document.getElementById('booking').scrollIntoView({behavior:'smooth'});
-document.getElementById('bookBtn').onclick=()=>{
- if(!start||!end) return;
- const phone=prompt('예약자 휴대폰번호를 입력해 주세요. (예: 010-1234-5678)');
- if(!phone) return;
- const digits=phone.replace(/\D/g,'');
- if(digits.length<10){ alert('휴대폰번호를 확인해 주세요.'); return; }
- const name=prompt('예약자 성함을 입력해 주세요.');
- if(!name) return;
- const mmdd=key(start).slice(5).replace('-','');
- const bookingNumber=`${mmdd}-${digits.slice(-4)}`;
- alert(`예약번호는 ${bookingNumber} 입니다.\n\n현재 v7은 네이버페이 승인 전 단계라 실제 HOLD/결제는 실행하지 않습니다. 승인 후 결제하기 버튼에 연결됩니다.`);
-};
-
-render();
-loadAvailability();
- // Footer modal
-document.querySelectorAll('[data-modal]').forEach(button=>{
-  button.addEventListener('click',()=>{
-    const modal=document.getElementById(button.dataset.modal);
-    if(modal) modal.classList.add('open');
-  });
-});
-
-document.querySelectorAll('.modal-close').forEach(button=>{
-  button.addEventListener('click',()=>{
-    button.closest('.modal-backdrop').classList.remove('open');
-  });
-});
-
-document.querySelectorAll('.modal-backdrop').forEach(modal=>{
-  modal.addEventListener('click',e=>{
-    if(e.target===modal) modal.classList.remove('open');
-  });
-});
-
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){
-    document.querySelectorAll('.modal-backdrop.open').forEach(modal=>{
-      modal.classList.remove('open');
-    });
-  }
-});
 </script>
+<script src="checkout.js"></script>
 </body>
 </html>
